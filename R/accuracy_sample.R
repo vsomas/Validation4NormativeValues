@@ -1,0 +1,63 @@
+#' Validates a sample using a two-sided one sample T-test
+#'
+#' @param sample A numeric vector of measurements to validate
+#' @param mean A numeric value of the normative mean
+#' @param sd A numeric value of the normative standard deviation
+#'
+#' @return A list with the following elements: SDSofSample, Validation, SD_of_x
+#' @export
+#'
+#' @examples
+#' # Normative values from Werle et. al
+#'
+#' Werle_age <-c(
+#' "18-19", "20-24", "25-29", "30-34", "35-39",
+#' "40-44", "45-49", "50-54", "55-59", "60-64",
+#' "65-69", "70-74", "75-79", "80-84", "85+")
+#'
+#' agecat <- factor(Werle_age, levels = c("18-19", "20-24", "25-29", "30-34", "35-39",
+#'                                        "40-44", "45-49", "50-54", "55-59", "60-64",
+#'                                        "65-69", "70-74", "75-79", "80-84", "85+"))
+#' # Values for Females
+#' Werle_females_sample <- c(31, 31, 30, 30, 42, 39, 40, 34, 28, 30, 34, 27, 26, 32, 28)
+#' Werle_females_D_mean_kg <-  c(32.0, 33.4, 34.3, 33.8, 35.8, 34.0, 34.1, 33.7, 31.9,
+#'  28.7, 29.5, 26.4, 25.0, 19.2, 16.9)
+#' Werle_females_D_SD_kg <- c(4.8, 5.4, 5.7, 5.9, 6.7, 6.0, 5.3, 4.5, 4.9, 5.5, 3.6, 6.8,
+#'  4.5, 5.2, 4.8)
+#'
+#' normWerleFemales <- data.frame(agecat,Werle_females_sample,
+#' Werle_females_D_mean_kg, Werle_females_D_SD_kg)
+#'
+#' # Generating artificial random samples of measurements
+#'
+#' set.seed(2288)
+#' agecat_new <- c()
+#' HGS_new <- c()
+#'
+#' for (i in 1:length(agecat)){
+#'   agecat_new <- append(agecat_new, rep(agecat[i], 125))
+#'   HGS_new <- append(HGS_new, rnorm(n = 125, mean = Werle_females_D_mean_kg[i], sd = 4))
+#' }
+#'
+#' dd_good_accuracy <- data.frame(HGS = HGS_new, agecat = agecat_new)
+#'
+#' # Statistical accuracy
+#'
+#' # First merge normative data with collected data
+#' ValidDatFemales_good_accuracy <- merge(normWerleFemales,dd_good_accuracy, by = c("agecat"))
+#' head(ValidDatFemales_good_accuracy)
+#'
+#' # Global validation for all age categories
+#'
+#' accuracy_sample(sample = ValidDatFemales_good_accuracy$HGS,
+#'                mean = ValidDatFemales_good_accuracy$Werle_females_D_mean_kg,
+#'                sd = ValidDatFemales_good_accuracy$Werle_females_D_SD_kg)
+#'
+
+
+accuracy_sample <- function(sample, mean, sd){
+  SDS_sample = (sample - mean)/sd
+  SDS_sample_validation <- stats::t.test(x = SDS_sample, alternative = "two.sided")     # significant p-value
+  SD <-  round(SDS_sample_validation$stderr*sqrt(as.numeric(SDS_sample_validation$parameter+1)),2)
+  return(list(SDSofsample = SDS_sample, Validation = SDS_sample_validation, SD_of_x = as.character(SD)))
+}

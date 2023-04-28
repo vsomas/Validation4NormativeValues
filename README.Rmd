@@ -1,18 +1,28 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
 
 # Validation4NormativeValues
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of Validation4NormativeValues is to provide an open source
-software for the reliability assessment of tabulated normative values.
+The goal of Validation4NormativeValues is to provide an open source software for the reliability assessment of tabulated normative values.
 
 ## Installation
 
-You can install the development version of Validation4NormativeValues
-from [GitHub](https://github.com/) with:
+You can install the development version of Validation4NormativeValues from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -23,15 +33,14 @@ devtools::install_github("vsomas/Validation4NormativeValues")
 
 This is a basic example which shows you how to solve a common problem:
 
-``` r
+```{r example}
 library(Validation4NormativeValues)
 ## basic example code
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
 
-``` r
+```{r Data}
 # NormativeValues from Werle et. al (2009)
 
 Werle_age <-c(
@@ -54,8 +63,5 @@ Werle_females_D_SD_kg <- c(4.8, 5.4, 5.7, 5.9, 6.7, 6.0, 5.3, 4.5, 4.9, 5.5, 3.6
 normWerleFemales <- data.frame(agecat, Werle_females_sample, Werle_females_D_mean_kg, Werle_females_D_SD_kg)
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this. You could also
-use GitHub Actions to re-render `README.Rmd` every time you push. An
-example workflow can be found here:
-<https://github.com/r-lib/actions/tree/v1/examples>.
+You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/v1/examples>.
+
